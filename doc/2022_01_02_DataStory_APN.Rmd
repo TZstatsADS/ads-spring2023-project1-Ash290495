@@ -1,0 +1,466 @@
+---
+title: "Are philosophies sustainable?"
+output: html_document
+date: "2023-02-01"
+---
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE) 
+```
+
+```{r echo=FALSE}
+#Upload introductory image
+library('knitr')
+
+include_graphics('C:/Users/naira_831868r/OneDrive/Desktop/ads-spring2023-project1-Ash290495/figs/TheThinker.webp')
+```
+
+Reference:
+https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.123rf.com%2Fphoto_189103907_thinker-le-penseur-bronze-sculpture-by-auguste-rodin-in-front-of-building-of-philosophy-department-a.html%3Fvti%3Dundefined-1-43&psig=AOvVaw05nW86f6QaQh70RrOYRGts&ust=1675324542645000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCID7uLns8_wCFQAAAAAdAAAAABB2
+
+```{r include=FALSE} 
+
+#Reading the dataset
+setwd('C:/Users/naira_831868r/OneDrive/Desktop/ads-spring2023-project1-Ash290495/data')
+data=read.csv('philosophy_data.csv')
+
+#Installing necessary packages
+library('sentimentr')
+library(wordcloud)
+library(tm)
+library(SnowballC)
+library(RColorBrewer)
+library(dplyr)
+library(rlang)
+library('tidytext')
+```
+
+What is Philosophy? Is it a belief or an emotion or a way of life driven by both? Let's take a tour..
+
+The data set consists of statements made by the greatest of philosophers ever known. They come from different schools of thought and appear to have varied perspectives. A lot of these schools are still alive while some can be seemed to have mellowed over time. There are 13 schools of philosophy mentioned herein that existed between late 1800s & early 2000s.
+
+The Analytic school, as the name suggests, focuses on the truth. Asking questions about worldly phenomena and formulating theories that are logical, that makes sense, was encouraged by these authors. They also stressed upon studying languages and realizing the value of time. 
+```{r echo=FALSE}
+#Word Cloud for Analytic
+data_analytic = data %>%
+  filter(school=="analytic") %>%
+  select(school, sentence_lowered)
+token_analytic<-data_analytic %>%
+  unnest_tokens(word,sentence_lowered) %>%
+  count(word,sort=TRUE) %>%
+  ungroup()
+data("stop_words")
+token_analytic_cleaned<-token_analytic %>%
+  anti_join(stop_words)
+set.seed(1031)
+token_analytic_cleaned %>%
+  with(wordcloud(word,n,
+            scale=c(5,0.5),
+            max.words=100,
+            min.freq=5,
+            random.order=FALSE,
+            rot.per=0.3,
+            random.color=FALSE,
+            colors=brewer.pal(9,"Blues")))
+
+```
+
+The Aristotle school of thought from ancient Greek times emphasized on scientific enquiries about natural entities like animals, time, body, water, motion.
+```{r echo=FALSE}
+#Word Cloud for Aristotle
+data_aristotle = data %>%
+  filter(school=="aristotle") %>%
+  select(school, sentence_lowered)
+token_aristotle<-data_aristotle %>%
+  unnest_tokens(word,sentence_lowered) %>%
+  count(word,sort=TRUE) %>%
+  ungroup()
+data("stop_words")
+token_aristotle_cleaned<-token_aristotle %>%
+  anti_join(stop_words)
+set.seed(1031)
+token_aristotle_cleaned %>%
+  with(wordcloud(word,n,
+                 scale=c(5,0.5),
+                 max.words=100,
+                 min.freq=5,
+                 random.order=FALSE,
+                 rot.per=0.3,
+                 random.color=FALSE,
+                 colors=brewer.pal(9,"Blues")))
+```
+
+The sole aim of the school of Capitalism is to make profit. The authors from this school appeared to preach mostly about price, money, labour, country, produce, quantity, capital, trade, rate, land etc. 
+```{r echo=FALSE}
+#Word Cloud for Capitalism
+data_capitalism = data %>%
+  filter(school=="capitalism") %>%
+  select(school, sentence_lowered)
+token_capitalism<-data_capitalism %>%
+  unnest_tokens(word,sentence_lowered) %>%
+  count(word,sort=TRUE) %>%
+  ungroup()
+data("stop_words")
+token_capitalism_cleaned<-token_capitalism %>%
+  anti_join(stop_words)
+set.seed(1031)
+token_capitalism_cleaned %>%
+  with(wordcloud(word,n,
+                 scale=c(5,0.5),
+                 max.words=100,
+                 min.freq=5,
+                 random.order=FALSE,
+                 rot.per=0.3,
+                 random.color=FALSE,
+                 colors=brewer.pal(9,"Blues")))
+```
+
+The authors following communist philosophy appeared to focus purely on labour, capital, production. This seems to go by the understanding of communism of establishing a classless society.
+```{r echo=FALSE}
+#Word Cloud for Communism
+data_communism = data %>%
+  filter(school=="communism") %>%
+  select(school, sentence_lowered)
+token_communism<-data_communism %>%
+  unnest_tokens(word,sentence_lowered) %>%
+  count(word,sort=TRUE) %>%
+  ungroup()
+data("stop_words")
+token_communism_cleaned<-token_communism %>%
+  anti_join(stop_words)
+set.seed(1031)
+token_communism_cleaned %>%
+  with(wordcloud(word,n,
+                 scale=c(5,0.5),
+                 max.words=100,
+                 min.freq=5,
+                 random.order=FALSE,
+                 rot.per=0.3,
+                 random.color=FALSE,
+                 colors=brewer.pal(9,"Blues")))
+```
+
+The school of continental thought is one that is non-analytical. The authors belonging to this school believe madness and creativity of thought, in losing oneself in the admiration of form, of time and of nature. They effectively use such language in their writings as well.
+```{r echo=FALSE}
+#Word Cloud for Continental
+data_continental = data %>%
+  filter(school=="continental") %>%
+  select(school, sentence_lowered)
+token_continental<-data_continental %>%
+  unnest_tokens(word,sentence_lowered) %>%
+  count(word,sort=TRUE) %>%
+  ungroup()
+data("stop_words")
+token_continental_cleaned<-token_continental %>%
+  anti_join(stop_words)
+set.seed(1031)
+token_continental_cleaned %>%
+  with(wordcloud(word,n,
+                 scale=c(5,0.5),
+                 max.words=100,
+                 min.freq=5,
+                 random.order=FALSE,
+                 rot.per=0.3,
+                 random.color=FALSE,
+                 colors=brewer.pal(9,"Blues")))
+```
+
+Authors following empiricism speak about ideas, mind, reason, nature. This thought of philosophy deals with all knowledge that one can receive from one's sensory organs. 
+```{r echo=FALSE}
+#Word Cloud for Empiricism
+data_empiricism = data %>%
+  filter(school=="empiricism") %>%
+  select(school, sentence_lowered)
+token_empiricism<-data_empiricism %>%
+  unnest_tokens(word,sentence_lowered) %>%
+  count(word,sort=TRUE) %>%
+  ungroup()
+data("stop_words")
+token_empiricism_cleaned<-token_empiricism %>%
+  anti_join(stop_words)
+set.seed(1031)
+token_empiricism_cleaned %>%
+  with(wordcloud(word,n,
+                 scale=c(5,0.5),
+                 max.words=100,
+                 min.freq=5,
+                 random.order=FALSE,
+                 rot.per=0.3,
+                 random.color=FALSE,
+                 colors=brewer.pal(9,"Blues")))
+```
+
+The school of feminism as the name suggests must deal with women's rights, love, life, racism, world etc. The authors from this school of thought have vividly used these terminologies in all of their writings as an expression of tradition being a probable contributor of bias in society.
+```{r echo=FALSE}
+#Word Cloud for Feminism
+data_feminism = data %>%
+  filter(school=="feminism") %>%
+  select(school, sentence_lowered)
+token_feminism<-data_feminism %>%
+  unnest_tokens(word,sentence_lowered) %>%
+  count(word,sort=TRUE) %>%
+  ungroup()
+data("stop_words")
+token_feminism_cleaned<-token_feminism %>%
+  anti_join(stop_words)
+set.seed(1031)
+token_feminism_cleaned %>%
+  with(wordcloud(word,n,
+                 scale=c(5,0.5),
+                 max.words=100,
+                 min.freq=5,
+                 random.order=FALSE,
+                 rot.per=0.3,
+                 random.color=FALSE,
+                 colors=brewer.pal(9,"Blues")))
+```
+
+There were also a set of philosophers who believed in German idealism. Their main focus was on turning reality into a 'mantra' for life, to follow it as one would follow religion. They speak of concept, reason, nature, consciousness, obect, existence and purity. 
+```{r echo=FALSE}
+#Word Cloud for German idealism
+data_german_idealism = data %>%
+  filter(school=="german_idealism") %>%
+  select(school, sentence_lowered)
+token_german_idealism<-data_german_idealism %>%
+  unnest_tokens(word,sentence_lowered) %>%
+  count(word,sort=TRUE) %>%
+  ungroup()
+data("stop_words")
+token_german_idealism_cleaned<-token_german_idealism %>%
+  anti_join(stop_words)
+set.seed(1031)
+token_german_idealism_cleaned %>%
+  with(wordcloud(word,n,
+                 scale=c(5,0.5),
+                 max.words=100,
+                 min.freq=5,
+                 random.order=FALSE,
+                 rot.per=0.3,
+                 random.color=FALSE,
+                 colors=brewer.pal(9,"Blues")))
+```
+
+Nietzsche was a German philosopher who believed in existentialism. An entire school of thought later developed as he gained followers. This branch of philosophy spoke about science and logic that questions the existence of good and evil, Common words in their text included thou, life, zarathustra, God, ye, thy, thee, time, love, world, hath.
+```{r echo=FALSE}
+#Word Cloud for Nietzsche
+data_nietzsche = data %>%
+  filter(school=="nietzsche") %>%
+  select(school, sentence_lowered)
+token_nietzsche<-data_nietzsche %>%
+  unnest_tokens(word,sentence_lowered) %>%
+  count(word,sort=TRUE) %>%
+  ungroup()
+data("stop_words")
+token_nietzsche_cleaned<-token_nietzsche %>%
+  anti_join(stop_words)
+set.seed(1031)
+token_nietzsche_cleaned %>%
+  with(wordcloud(word,n,
+                 scale=c(5,0.5),
+                 max.words=100,
+                 min.freq=5,
+                 random.order=FALSE,
+                 rot.per=0.3,
+                 random.color=FALSE,
+                 colors=brewer.pal(9,"Blues")))
+```
+
+Phenomenology is another school of thought that focuses on reasoning observed phenomena as against blindly believing in preconceived notions. Philosophers of this school speak about the world, about consciousness, time, dassein, sense, knowledge etc.
+```{r echo=FALSE}
+#Word Cloud for Phenomenology
+data_phenomenology = data %>%
+  filter(school=="phenomenology") %>%
+  select(school, sentence_lowered)
+token_phenomenology<-data_phenomenology %>%
+  unnest_tokens(word,sentence_lowered) %>%
+  count(word,sort=TRUE) %>%
+  ungroup()
+data("stop_words")
+token_phenomenology_cleaned<-token_phenomenology %>%
+  anti_join(stop_words)
+set.seed(1031)
+token_phenomenology_cleaned %>%
+  with(wordcloud(word,n,
+                 scale=c(5,0.5),
+                 max.words=100,
+                 min.freq=5,
+                 random.order=FALSE,
+                 rot.per=0.3,
+                 random.color=FALSE,
+                 colors=brewer.pal(9,"Blues")))
+```
+
+Plato was another philosopher that had an entire school of thought named after him. Followers of this philosophy believed in following a lifestyle that isn't materialistic. They thus for obvious reasons spoke of Socrates, people, knowledge, time, soul, the city and Gods.
+```{r echo=FALSE}
+#Word Cloud for Plato
+data_plato = data %>%
+  filter(school=="plato") %>%
+  select(school, sentence_lowered)
+token_plato<-data_plato %>%
+  unnest_tokens(word,sentence_lowered) %>%
+  count(word,sort=TRUE) %>%
+  ungroup()
+data("stop_words")
+token_plato_cleaned<-token_plato %>%
+  anti_join(stop_words)
+set.seed(1031)
+token_plato_cleaned %>%
+  with(wordcloud(word,n,
+                 scale=c(5,0.5),
+                 max.words=100,
+                 min.freq=5,
+                 random.order=FALSE,
+                 rot.per=0.3,
+                 random.color=FALSE,
+                 colors=brewer.pal(9,"Blues")))
+```
+
+Then came the rationalists. Those from the school of Rationalism also question the existence of God. They speak most about mind, body, nature, reason, idea.They believe that being able to come up with a logical reason for everything is the true test of one's knowledge.  
+```{r echo=FALSE}
+#Word Cloud for Rationalism
+data_rationalism = data %>%
+  filter(school=="rationalism") %>%
+  select(school, sentence_lowered)
+token_rationalism<-data_rationalism %>%
+  unnest_tokens(word,sentence_lowered) %>%
+  count(word,sort=TRUE) %>%
+  ungroup()
+data("stop_words")
+token_rationalism_cleaned<-token_rationalism %>%
+  anti_join(stop_words)
+set.seed(1031)
+token_rationalism_cleaned %>%
+  with(wordcloud(word,n,
+                 scale=c(5,0.5),
+                 max.words=100,
+                 min.freq=5,
+                 random.order=FALSE,
+                 rot.per=0.3,
+                 random.color=FALSE,
+                 colors=brewer.pal(9,"Blues")))
+```
+
+Philosophers from the school of Stoicism on the other hand believe in the existence of God and admire nature. They speak in archaic language by using words like thou, thee, thy, doth. According to them, one's virtue is sufficient to lead a fulfilling life. 
+```{r echo=FALSE}
+#Word Cloud for Stoicism
+data_stoicism = data %>%
+  filter(school=="stoicism") %>%
+  select(school, sentence_lowered)
+token_stoicism<-data_stoicism %>%
+  unnest_tokens(word,sentence_lowered) %>%
+  count(word,sort=TRUE) %>%
+  ungroup()
+data("stop_words")
+token_stoicism_cleaned<-token_stoicism %>%
+  anti_join(stop_words)
+set.seed(1031)
+token_stoicism_cleaned %>%
+  with(wordcloud(word,n,
+                 scale=c(5,0.5),
+                 max.words=100,
+                 min.freq=5,
+                 random.order=FALSE,
+                 rot.per=0.3,
+                 random.color=FALSE,
+                 colors=brewer.pal(9,"Blues")))
+```
+
+All in all, there were some schools of thought that preached about their beliefs, following a healthy and decent approach, accompanied by respect for other schools of thought. While there were some that were quite aggressive with their philosophies. A comparison of the emotion in these philosophical texts shows that the overall level of positivity was highest in the preachings of German idealism, Capitalism and Plato having scores above 0.1, followed by schools of Empiricism, Phenomenology, Rationalism and Stoicism having scores around 0.09.
+```{r echo=FALSE}
+
+#Sentiment Analysis with sentences per school
+#Analytic School
+data_sentiment_perschool1 = data_analytic %>% 
+  summarise(philosophy_perschool1 = paste(sentence_lowered, collapse=" "))
+text_perschool1 = get_sentences(data_sentiment_perschool1$philosophy_perschool1)
+sentiment_perschool1 = sentiment_by(text_perschool1)
+sentiment_perschool1
+#Aristotle School
+data_sentiment_perschool2 = data_aristotle %>% 
+  summarise(philosophy_perschool2 = paste(sentence_lowered, collapse=" "))
+text_perschool2 = get_sentences(data_sentiment_perschool2$philosophy_perschool2)
+sentiment_perschool2 = sentiment_by(text_perschool2)
+sentiment_perschool2
+#Capitalism School
+data_sentiment_perschool3 = data_capitalism %>% 
+  summarise(philosophy_perschool3 = paste(sentence_lowered, collapse=" "))
+text_perschool3 = get_sentences(data_sentiment_perschool3$philosophy_perschool3)
+sentiment_perschool3 = sentiment_by(text_perschool3)
+sentiment_perschool3
+#Communism School
+data_sentiment_perschool4 = data_communism %>% 
+  summarise(philosophy_perschool4 = paste(sentence_lowered, collapse=" "))
+text_perschool4 = get_sentences(data_sentiment_perschool4$philosophy_perschool4)
+sentiment_perschool4 = sentiment_by(text_perschool4)
+sentiment_perschool4
+#Continental School
+data_sentiment_perschool5 = data_continental %>% 
+  summarise(philosophy_perschool5 = paste(sentence_lowered, collapse=" "))
+text_perschool5 = get_sentences(data_sentiment_perschool5$philosophy_perschool5)
+sentiment_perschool5 = sentiment_by(text_perschool5)
+sentiment_perschool5
+#Empiricism School
+data_sentiment_perschool6 = data_empiricism %>% 
+  summarise(philosophy_perschool6 = paste(sentence_lowered, collapse=" "))
+text_perschool6 = get_sentences(data_sentiment_perschool6$philosophy_perschool6)
+sentiment_perschool6 = sentiment_by(text_perschool6)
+sentiment_perschool6
+#Feminism School
+data_sentiment_perschool7 = data_feminism %>% 
+  summarise(philosophy_perschool7 = paste(sentence_lowered, collapse=" "))
+text_perschool7 = get_sentences(data_sentiment_perschool7$philosophy_perschool7)
+sentiment_perschool7 = sentiment_by(text_perschool7)
+sentiment_perschool7
+#Idealism School
+data_sentiment_perschool8 = data_german_idealism %>% 
+  summarise(philosophy_perschool8 = paste(sentence_lowered, collapse=" "))
+text_perschool8 = get_sentences(data_sentiment_perschool8$philosophy_perschool8)
+sentiment_perschool8 = sentiment_by(text_perschool8)
+sentiment_perschool8
+#Nietzsche School
+data_sentiment_perschool9 = data_nietzsche %>% 
+  summarise(philosophy_perschool9 = paste(sentence_lowered, collapse=" "))
+text_perschool9 = get_sentences(data_sentiment_perschool9$philosophy_perschool9)
+sentiment_perschool9 = sentiment_by(text_perschool9)
+sentiment_perschool9
+#Phenomenology School
+data_sentiment_perschool10 = data_phenomenology %>% 
+  summarise(philosophy_perschool10 = paste(sentence_lowered, collapse=" "))
+text_perschool10 = get_sentences(data_sentiment_perschool10$philosophy_perschool10)
+sentiment_perschool10 = sentiment_by(text_perschool10)
+sentiment_perschool10
+#Plato School
+data_sentiment_perschool11 = data_plato %>% 
+  summarise(philosophy_perschool11 = paste(sentence_lowered, collapse=" "))
+text_perschool11 = get_sentences(data_sentiment_perschool11$philosophy_perschool11)
+sentiment_perschool11 = sentiment_by(text_perschool11)
+sentiment_perschool11
+#Rationalism School
+data_sentiment_perschool12 = data_rationalism %>% 
+  summarise(philosophy_perschool12 = paste(sentence_lowered, collapse=" "))
+text_perschool12 = get_sentences(data_sentiment_perschool12$philosophy_perschool12)
+sentiment_perschool12 = sentiment_by(text_perschool12)
+sentiment_perschool12
+#Stoicism School
+data_sentiment_perschool13 = data_stoicism %>% 
+  summarise(philosophy_perschool13 = paste(sentence_lowered, collapse=" "))
+text_perschool13 = get_sentences(data_sentiment_perschool13$philosophy_perschool13)
+sentiment_perschool13 = sentiment_by(text_perschool13)
+sentiment_perschool13
+
+```
+A further study of how these thoughts evolved over time shows that the beliefs were most positive in the 1900s, with a score of 0.078.
+
+```{r echo=FALSE}
+#Sentiment Analysis with time
+data2=data %>%
+  mutate(binned_year=as.factor(cut(data$corpus_edition_date, breaks=c(1800,1900,2000,2100))))
+
+data_sentiment2 = data2 %>% 
+  group_by(binned_year) %>% 
+  summarise(philosophy = paste(sentence_lowered, collapse=" "))
+text2 = get_sentences(data_sentiment2$philosophy)
+sentiment2 = sentiment_by(text2)
+sentiment2
+```
+
+Over time, the schools of thought that believed in inquisitiveness and the importance of reasoning in life should have survived as these questions are still doing the rounds; however, this requires further analysis and data of contemporary writers. 
